@@ -184,7 +184,7 @@ class AppliedANN:
         gradients_weights = []
         num_layers = len(self.layers)
 
-        globals()["grad_W1"] = ( -Y*(1- Y**2)*np.sum([self.polynomialCoeffs[i]*H["2"][i-1] if i > 0 else self.polynomialCoeffs[0] for i in range(len(H["2"]))]))
+        globals()["grad_W1"] = ( -Y*(1- Y**2)*np.sum([(i+1)*self.polynomialCoeffs[i]*H["1"]**(i) for i in range(len(H["2"]))]))
         gradients_weights.append(globals()["grad_W1"])
 
         return gradients_weights
@@ -204,8 +204,8 @@ class AppliedANN:
             Y, H, A = self.forwardPolynomialRootFinderANN()
             grad_weights = self.backPropagatePolynomialANN(Y, H, A)
             deltaw = grad_weights
-
-            LOSS.append(self.meanSquaredErrorLoss( 0, Y))
+            print(deltaw)
+            LOSS.append( 0.5*(0.000 - Y)**2)
             
             self.weights["1"] = self.weights["1"] - learning_rate * deltaw[0]
 
