@@ -184,7 +184,7 @@ class AppliedANN:
         gradients_weights = []
         num_layers = len(self.layers)
 
-        globals()["grad_W1"] = ( -Y*(1- Y**2)*np.matmul(self.polynomialCoeffs[1:], self.der_polynomialBasis(H["2"])))
+        globals()["grad_W1"] = ( -Y*(1- Y**2)*np.sum([self.polynomialCoeffs[i]*H["2"][i-1] if i > 0 else self.polynomialCoeffs[0] for i in range(len(H["2"]))]))
         gradients_weights.append(globals()["grad_W1"])
 
         return gradients_weights
