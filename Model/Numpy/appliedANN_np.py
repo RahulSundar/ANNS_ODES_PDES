@@ -139,7 +139,7 @@ class AppliedANN:
         weights = {}
         biases = {}
         
-        weights['1'] = np.random.normal(0, 1, size=(self.layers[0], self.layers[1])) 
+        weights['1'] = np.random.normal(0, 1, size=(self.layers[0], self.layers[1])) #np.array(-2.0).reshape(self.layers[0], self.layers[1])#np.random.normal(0, 1, size=(self.layers[0], self.layers[1])) 
         biases['1'] = np.zeros((self.layers[1],1))
         weights['2'] = np.ones((self.layers[1], self.layers[2]))
         biases['2'] = np.zeros((self.layers[2],1))
@@ -184,7 +184,7 @@ class AppliedANN:
         gradients_weights = []
         num_layers = len(self.layers)
 
-        globals()["grad_W1"] = ( -Y*(1 - Y**2)*np.sum([(i+1)*self.polynomialCoeffs[i]*H["1"]**(i) for i in range(len(H["2"]))]))
+        globals()["grad_W1"] = ( Y*(1 - Y**2)*np.sum([(i+1)*self.weights["3"][i]*H["1"]**(i) for i in range(len(H["2"]))]))
         gradients_weights.append(globals()["grad_W1"])
 
         return gradients_weights
@@ -205,9 +205,9 @@ class AppliedANN:
             grad_weights = self.backPropagatePolynomialANN(Y, H, A)
             deltaw = grad_weights
             print(deltaw)
-            LOSS.append( 0.5*(0.000 - Y[0])**2)
+            LOSS.append( 0.5*(Y[0])**2)
             
-            self.weights["1"] = self.weights["1"] - learning_rate * deltaw[0]
+            self.weights["1"] = self.weights["1"] - learning_rate * grad_weights[0]
 
             elapsed = time.time() - start_time
             
