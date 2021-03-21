@@ -166,7 +166,7 @@ class AppliedANN:
 
         H = {}
         A = {}
-        A["0"] = np.array(1).reshape(1,1)
+        A["0"] = np.array(1.0).reshape(1,1)
         H["0"] = A["0"]
         A["1"] = np.add(np.matmul(self.weights["1"].transpose(), H["0"]), self.biases["1"])
         H["1"] = A["1"]
@@ -184,7 +184,7 @@ class AppliedANN:
         gradients_weights = []
         num_layers = len(self.layers)
 
-        globals()["grad_W1"] = ( -Y*(1- Y**2)*np.sum([(i+1)*self.polynomialCoeffs[i]*H["1"]**(i) for i in range(len(H["2"]))]))
+        globals()["grad_W1"] = ( -Y*(1 - Y**2)*np.sum([(i+1)*self.polynomialCoeffs[i]*H["1"]**(i) for i in range(len(H["2"]))]))
         gradients_weights.append(globals()["grad_W1"])
 
         return gradients_weights
@@ -205,7 +205,7 @@ class AppliedANN:
             grad_weights = self.backPropagatePolynomialANN(Y, H, A)
             deltaw = grad_weights
             print(deltaw)
-            LOSS.append( 0.5*(0.000 - Y)**2)
+            LOSS.append( 0.5*(0.000 - Y[0])**2)
             
             self.weights["1"] = self.weights["1"] - learning_rate * deltaw[0]
 
